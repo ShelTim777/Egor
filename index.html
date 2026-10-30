@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title>System Security</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Courier New',monospace;background:#000;color:#00ff41;min-height:100vh;overflow-x:hidden;padding:14px;transition:background .6s}
+body.red{background:#0a0000;color:#ff3b30}
+canvas#mx{position:fixed;inset:0;z-index:0;opacity:.10;pointer-events:none}
+main{position:relative;z-index:1;max-width:480px;margin:0 auto}
+.hdr{border:1px solid currentColor;padding:12px;margin-bottom:12px;background:rgba(0,20,0,.6);box-shadow:0 0 24px rgba(0,255,65,.25),inset 0 0 24px rgba(0,255,65,.08)}
+body.red .hdr{background:rgba(30,0,0,.6);box-shadow:0 0 24px rgba(255,59,48,.3),inset 0 0 24px rgba(255,59,48,.1)}
+.hdr h1{font-size:20px;letter-spacing:2px;animation:gl 4s infinite}
+.hdr .sub{font-size:11px;opacity:.75;margin-top:5px;line-height:1.5}
+@keyframes gl{0%,88%,100%{transform:none;text-shadow:none}90%{transform:translateX(-2px);text-shadow:2px 0 #f00,-2px 0 #0ff}93%{transform:translateX(2px)}}
+.warn{border:1px solid currentColor;padding:10px;margin:10px 0;font-size:12px;line-height:1.5;animation:bl 1.4s infinite;background:rgba(255,59,48,.08)}
+@keyframes bl{50%{opacity:.55}}
+.log{border:1px solid rgba(0,255,65,.35);background:rgba(0,15,0,.7);padding:10px;height:230px;overflow-y:auto;font-size:11px;line-height:1.75;margin:10px 0}
+body.red .log{border-color:rgba(255,59,48,.4);background:rgba(20,0,0,.7)}
+.log .ok{color:#00ff41}.log .bad{color:#ff3b30}.log .w{color:#ffcc00}.log .dim{color:#5a7a5a}
+body.red .log .dim{color:#7a4a4a}
+.prog{height:12px;border:1px solid currentColor;overflow:hidden;margin:8px 0;background:rgba(0,0,0,.5)}
+.prog>div{height:100%;width:0%;background:currentColor;box-shadow:0 0 14px currentColor;transition:width .25s}
+.row{display:flex;justify-content:space-between;font-size:12px;padding:7px 9px;border:1px solid rgba(0,255,65,.3);margin:5px 0;background:rgba(0,15,0,.5)}
+body.red .row{border-color:rgba(255,59,48,.35);background:rgba(20,0,0,.5)}
+.row b{color:#ffcc00}
+.cd{font-size:52px;text-align:center;font-weight:900;letter-spacing:4px;margin:8px 0;text-shadow:0 0 26px currentColor;animation:bl 1s infinite}
+.hash{font-size:9px;opacity:.6;word-break:break-all;margin:3px 0}
+.hide{display:none}
+.btn{display:block;width:100%;padding:15px;margin:10px 0;background:transparent;border:1px solid currentColor;color:inherit;font-family:inherit;font-size:14px;font-weight:900;letter-spacing:2px;cursor:pointer;text-transform:uppercase}
+.btn:active{transform:scale(.97)}
+/* финал-панчлайн */
+.joke{border:2px solid #ffd75e;background:rgba(40,30,0,.75);color:#ffe9b0;padding:20px;margin:14px 0;text-align:center;font-size:15px;line-height:1.8;box-shadow:0 0 40px rgba(255,215,94,.35)}
+.joke b{color:#ffd75e;font-size:20px;display:block;margin-bottom:8px}
+.joke .big{font-size:52px;margin:6px 0}
+</style>
+</head>
+<body>
+<canvas id="mx"></canvas>
+<main>
+
+<!-- ЭТАП 1: ТРЕВОГА -->
+<div id="s1">
+<div class="hdr"><h1>⚠️ SYSTEM SECURITY ALERT</h1>
+<div class="sub">iOS Security Daemon • несанкционированное подключение<br>Устройство: iPhone • Имя: BUGOR • ОС: iOS 17.x</div></div>
+<div class="warn">Обнаружена активная сессия перехвата данных с неизвестного узла. Соединение установлено ВНЕ вашего контроля.</div>
+<div class="log" id="l1"></div>
+<div class="prog"><div id="p1"></div></div>
+<div class="row"><span>Статус соединения</span><b id="st1">ПЕРЕХВАТ...</b></div>
+</div>
+
+<!-- ЭТАП 2: УТЕЧКА -->
+<div id="s2" class="hide">
+<div class="hdr"><h1>📤 ЭКСФИЛЬТРАЦИЯ ДАННЫХ</h1>
+<div class="sub">узел получения: 185.220.••.•• (TOR exit) • канал зашифрован</div></div>
+<div class="log" id="l2"></div>
+<div class="prog"><div id="p2"></div></div>
+<div id="leak"></div>
+</div>
+
+<!-- ЭТАП 3: МАЙНЕР -->
+<div id="s3" class="hide">
+<div class="hdr"><h1>⛏ DEPLOYED: XMR-MINER</h1>
+<div class="sub">процесс замаскирован под системный • автозапуск включён</div></div>
+<div class="warn">УСЛОВИЕ АКТИВАЦИИ ПОЛНОЙ МОЩНОСТИ: если на карту не поступит зарплата — майнер перейдёт в режим 100% CPU без отключения.</div>
+<div class="cd" id="cd">01:00</div>
+<div style="text-align:center;font-size:11px;opacity:.8">до перехода в максимальный режим</div>
+<div class="log" id="l3"></div>
+<div class="row"><span>Намайнено</span><b id="btc">0.00000000 XMR</b></div>
+<div class="row"><span>Нагрузка CPU</span><b id="cpu">—</b></div>
+<div class="row"><span>Температура</span><b id="tmp">—</b></div>
+<div class="hash" id="hsh"></div>
+</div>
+
+<!-- ЭТАП 4: ПАНЧЛАЙН -->
+<div id="s4" class="hide">
+<div class="joke"><span class="big">😂</span><b>БРО, ВЫДОХНИ.</b>
+Никакого стиллера нет. Никакого майнера нет. Твой iPhone в полном порядке, ничего не украдено и не майнится — это просто страничка с анимацией.<br><br>
+Это привет от братана, пока ты ждёшь зарплату 💸<br><br>
+Единственный реальный «вирус» в этой истории — твой босс, который второй месяц кормит завтраками.<br><br>
+<b style="font-size:16px">Иди и выбей свою зарплату, бугор. 🤝</b><br>
+А телефон можешь спокойно положить — он чище, чем был.</div>
+<button class="btn" onclick="location.reload()">↻ прокрутить ещё раз для прикола</button>
+</div>
+
+</main>
+<script>
+/* фон-матрица */
+var c=document.getElementById('mx'),x=c.getContext('2d');
+function rz(){c.width=innerWidth;c.height=innerHeight}rz();addEventListener('resize',rz);
+var cols=Math.floor(c.width/12),dr=Array(cols).fill(1);
+setInterval(function(){x.fillStyle='rgba(0,0,0,.07)';x.fillRect(0,0,c.width,c.height);x.fillStyle=getComputedStyle(document.body).color;x.font='12px monospace';
+for(var i=0;i<dr.length;i++){x.fillText(String.fromCharCode(0x30A0+Math.random()*96),i*12,dr[i]*12);if(dr[i]*12>c.height&&Math.random()>.975)dr[i]=0;dr[i]++}},55);
+
+function $(i){return document.getElementById(i)}
+function log(id,t,cl){var l=$(id),d=document.createElement('div');if(cl)d.className=cl;d.textContent=t;l.appendChild(d);l.scrollTop=l.scrollHeight}
+function hx(n){var s='';for(var i=0;i<n;i++)s+='0123456789abcdef'[Math.random()*16|0];return s}
+function show(n){for(var i=1;i<=4;i++)$('s'+i).classList.add('hide');$('s'+n).classList.remove('hide');scrollTo(0,0)}
+
+/* ЭТАП 1 */
+var L1=['[kernel] внешний отладочный мост активен','[kernel] профиль доверия изменён','[net] туннель установлен → 185.220.••.••:4444','[net] обход локального файрвола... OK','[sys] отключён запрос биометрии','[sys] фоновый агент внедрён (pid 666)','[!] устройство полностью под контролем узла'];
+(function(){var i=0;(function t(){if(i<L1.length){log('l1',L1[i],i>=5?'bad':'ok');$('p1').style.width=((i+1)/L1.length*100)+'%';i++;setTimeout(t,650)}else{$('st1').textContent='КОНТРОЛЬ УЗЛА';setTimeout(function(){show(2);stage2()},700)}})()})();
+
+/* ЭТАП 2 */
+var LEAK=[['Контакты','847 записей'],['Фото и видео','2 847 объектов'],['iMessage / SMS','14 203 сообщения'],['Telegram-сессия','активна, токен извлечён'],['Банковское приложение','обнаружено, баланс считан'],['Apple ID','b••••@icloud.com (маскирован)'],['Номер устройства','+7 963 ••• ••-30'],['Геолокация (последняя)','определена с точностью 8 м']];
+function stage2(){var i=0;
+(function t(){if(i<LEAK.length){log('l2','[exfil] '+LEAK[i][0]+' → упаковано ('+LEAK[i][1]+')',i>=4?'bad':'w');
+$('leak').innerHTML=LEAK.slice(0,i+1).map(function(r){return '<div class="row"><span>'+r[0]+'</span><b>передано</b></div>'}).join('');
+$('p2').style.width=((i+1)/LEAK.length*100)+'%';i++;setTimeout(t,700)}else{log('l2','[exfil] архив 412 МБ отправлен на узел','bad');setTimeout(function(){document.body.classList.add('red');show(3);stage3()},800)}})()}
+
+/* ЭТАП 3 */
+function stage3(){var left=60,xmr=0;
+log('l3','[miner] процесс замаскирован под com.apple.systemd','bad');
+log('l3','[miner] потоки: 6/6 запущены','bad');
+var iv=setInterval(function(){
+xmr+=Math.random()*4e-5;$('btc').textContent=xmr.toFixed(8)+' XMR';
+$('cpu').textContent=(96+Math.random()*4).toFixed(0)+'%';
+$('tmp').textContent=(41+Math.random()*4).toFixed(1)+'°C';
+$('hsh').textContent='0x'+hx(64);
+if(Math.random()<.25)log('l3','[miner] share accepted • diff '+hx(6),'dim');
+left--;var m=(left/60|0),s=left%60;$('cd').textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s;
+if(left<=0){clearInterval(iv);show(4);document.body.classList.remove('red')}
+},1000)}
+</script>
+</body>
+  </html>
